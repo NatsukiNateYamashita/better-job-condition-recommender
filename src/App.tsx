@@ -116,7 +116,7 @@ function App() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-3">
-                <Cloud className="w-6 h-6 text-blue" />
+                <Cloud className="w-12 h-12 text-blue-600" />
                 {/* <div className="flex items-center gap-2">
                   <Grid3X3 className="w-4 h-4 text-white" />
                   <span className="text-white font-medium text-sm">HAYABUSA Lightning</span>
