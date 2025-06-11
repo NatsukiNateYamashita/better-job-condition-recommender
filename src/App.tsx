@@ -154,7 +154,7 @@ function App() {
           <nav className="flex items-center gap-6">
              <div className="flex items-center gap-2">
                   <Grid3X3 className="w-6 h-6 text-gray-700" />
-                  <span className="text-gray-700 font-bold text-base">HAYABUSA Lightning</span>
+                  <span className="text-gray-700 font-bold text-lg">HAYABUSA Lightning</span>
             </div>
             <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-sky-600 bg-sky-50 rounded-md hover:bg-sky-100 transition-colors">
               ホーム
