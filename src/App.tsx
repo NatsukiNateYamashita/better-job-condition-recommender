@@ -117,10 +117,10 @@ function App() {
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-3">
                 <Cloud className="w-6 h-6 text-white" />
-                <div className="flex items-center gap-2">
+                {/* <div className="flex items-center gap-2">
                   <Grid3X3 className="w-4 h-4 text-white" />
                   <span className="text-white font-medium text-sm">HAYABUSA Lightning</span>
-                </div>
+                </div> */}
               </div>
             </div>
             
@@ -155,6 +155,10 @@ function App() {
         {/* Navigation Bar */}
         <div className="px-4 py-2 bg-white">
           <nav className="flex items-center gap-6">
+          <div className="flex items-center gap-2">
+                  <Grid3X3 className="w-4 h-4 text-white" />
+                  <span className="text-white font-medium text-sm">HAYABUSA Lightning</span>
+                </div>
             <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors">
               ホーム
             </button>
@@ -198,7 +202,7 @@ function App() {
             </div>
             <div>
               <h1 className="text-2xl font-bold text-white">求人条件最適化ツール</h1>
-              <p className="text-blue-100 text-sm mt-1">人材マーケット分析による最適な求人条件の提案</p>
+              <p className="text-blue-100 text-sm mt-1">人材プール照合による最適な求人条件の提案</p>
             </div>
           </div>
         </div>
