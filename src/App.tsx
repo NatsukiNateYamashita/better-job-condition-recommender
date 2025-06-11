@@ -108,7 +108,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-100 to-indigo-200">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-sky-100 to-indigo-200">
       {/* Salesforce Lightning Header */}
       <header className="bg-white border-b border-gray-200 shadow-sm">
         {/* Top Header Bar */}
@@ -117,7 +117,7 @@ function App() {
             {/* 左側ロゴ */}
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-3">
-                <Cloud className="w-12 h-12 text-blue-600" />
+                <Cloud className="w-12 h-12 text-sky-500" />
               </div>
             </div>
             {/* 中央 検索窓 */}
@@ -127,20 +127,20 @@ function App() {
                 <input
                   type="text"
                   placeholder="検索..."
-                  className="pl-10 pr-4 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full bg-white"
+                  className="pl-10 pr-4 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 w-full bg-white"
                 />
               </div>
             </div>
             {/* 右側アイコン */}
             <div className="flex items-center gap-2 ml-4">
-              <button className="p-1.5 text-gray-700 hover:bg-blue-700 rounded-md">
+              <button className="p-1.5 text-gray-700 hover:bg-sky-500 rounded-md">
                 <Settings className="w-4 h-4" />
               </button>
-              <button className="p-1.5 text-gray-700 hover:bg-blue-700 rounded-md">
+              <button className="p-1.5 text-gray-700 hover:bg-sky-500 rounded-md">
                 <Bell className="w-4 h-4" />
               </button>
               <div className="flex items-center gap-2 ml-2">
-                <div className="w-6 h-6 bg-blue-800 rounded-full flex items-center justify-center">
+                <div className="w-6 h-6 bg-sky-600 rounded-full flex items-center justify-center">
                   <User className="w-3 h-3 text-gray-700" />
                 </div>
                 <span className="text-sm font-medium text-gray-700">山下 夏輝</span>
@@ -150,41 +150,41 @@ function App() {
         </div>
 
         {/* Navigation Bar */}
-        <div className="border-t-2 border-blue-600 px-4 py-2 bg-white">
+        <div className="border-t-2 border-sky-500 px-4 py-2 bg-white">
           <nav className="flex items-center gap-6">
              <div className="flex items-center gap-2">
                   <Grid3X3 className="w-4 h-4 text-gray-700" />
                   <span className="text-gray-700 font-large text-sm">HAYABUSA Lightning</span>
             </div>
-            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors">
+            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-sky-500 bg-sky-50 rounded-md hover:bg-sky-100 transition-colors">
               ホーム
             </button>
-            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors">
+            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-sky-500 hover:bg-gray-50 rounded-md transition-colors">
               Chatter
             </button>
-            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors">
+            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-sky-500 hover:bg-gray-50 rounded-md transition-colors">
               ジョブ検索
             </button>
-            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors">
+            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-sky-500 hover:bg-gray-50 rounded-md transition-colors">
               キャンディデート検索
             </button>
-            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors">
+            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-sky-500 hover:bg-gray-50 rounded-md transition-colors">
               クライアント
               <ChevronDown className="w-3 h-3" />
             </button>
-            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors">
+            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-sky-500 hover:bg-gray-50 rounded-md transition-colors">
               キャンディデイト/クライアント
               <ChevronDown className="w-3 h-3" />
             </button>
-            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors">
+            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-sky-500 hover:bg-gray-50 rounded-md transition-colors">
               ジョブ
               <ChevronDown className="w-3 h-3" />
             </button>
-            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors">
+            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-sky-500 hover:bg-gray-50 rounded-md transition-colors">
               マッチングパイプライン
               <ChevronDown className="w-3 h-3" />
             </button>
-            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors">
+            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-sky-500 hover:bg-gray-50 rounded-md transition-colors">
               さらに表示
               <ChevronDown className="w-3 h-3" />
             </button>
@@ -192,14 +192,14 @@ function App() {
         </div>
 
         {/* Page Title Section */}
-        <div className="px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-700">
+        <div className="px-6 py-4 bg-gradient-to-r from-sky-500 to-sky-500">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">R</span>
             </div>
             <div>
               <h1 className="text-2xl font-bold text-white">求人条件最適化ツール</h1>
-              <p className="text-blue-100 text-sm mt-1">人材プール照合による最適な求人条件の提案</p>
+              <p className="text-sky-100 text-sm mt-1">人材プール照合による最適な求人条件の提案</p>
             </div>
           </div>
         </div>
