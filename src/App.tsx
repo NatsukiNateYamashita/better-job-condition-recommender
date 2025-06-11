@@ -117,7 +117,7 @@ function App() {
             {/* 左側ロゴ */}
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-3">
-                <Cloud className="w-12 h-12 text-sky-600" />
+                <Cloud className="w-12 h-12 text-sky-600 fill-sky-600" />
               </div>
             </div>
             {/* 中央 検索窓 */}
@@ -153,8 +153,8 @@ function App() {
         <div className="px-4 py-2 bg-white">
           <nav className="flex items-center gap-6">
              <div className="flex items-center gap-2">
-                  <Grid3X3 className="w-4 h-4 text-gray-700" />
-                  <span className="text-gray-700 font-large text-sm">HAYABUSA Lightning</span>
+                  <Grid3X3 className="w-6 h-6 text-gray-700" />
+                  <span className="text-lg text-gray-700 font-bold text-sm">HAYABUSA Lightning</span>
             </div>
             <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-sky-600 bg-sky-50 rounded-md hover:bg-sky-100 transition-colors">
               ホーム
