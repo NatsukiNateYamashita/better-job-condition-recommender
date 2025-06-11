@@ -108,7 +108,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-sky-100 to-indigo-200">
+    <div className="min-h-screen bg-gradient-to-b from-indigo-400 to-indigo-sky100">
       {/* Salesforce Lightning Header */}
       <header className="bg-white border-b border-gray-200 shadow-sm">
         {/* Top Header Bar */}
@@ -192,14 +192,14 @@ function App() {
         </div>
 
         {/* Page Title Section */}
-        <div className="border-t-2 border-sky-600 px-6 py-4 bg-gradient-to-r from-sky-600 to-sky-600">
+        <div className="border-t-2 border-sky-600 px-6 py-4 bg-gradient-to-r from-glay-100 to-glay-100">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-sky-900 bg-opacity-20 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">R</span>
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-white">求人条件最適化ツール</h1>
-              <p className="text-sky-100 text-sm mt-1">人材プール照合による最適な求人条件の提案</p>
+              <h1 className="text-2xl font-bold text-glay-900">求人条件最適化ツール</h1>
+              <p className="text-glay-700 text-sm mt-1">人材プール照合による最適な求人条件の提案</p>
             </div>
           </div>
         </div>
