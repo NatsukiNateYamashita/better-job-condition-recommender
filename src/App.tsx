@@ -117,10 +117,6 @@ function App() {
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-3">
                 <Cloud className="w-12 h-12 text-blue-600" />
-                {/* <div className="flex items-center gap-2">
-                  <Grid3X3 className="w-4 h-4 text-white" />
-                  <span className="text-white font-medium text-sm">HAYABUSA Lightning</span>
-                </div> */}
               </div>
             </div>
             
@@ -135,11 +131,11 @@ function App() {
               </div>
               
               <div className="flex items-center gap-2">
-                <button className="p-1.5 text-gray-700 hover:bg-blue-700 rounded-md">
-                  <Bell className="w-4 h-4" />
+              <button className="p-1.5 text-gray-700 hover:bg-blue-700 rounded-md">
+                  <Settings className="w-4 h-4" />
                 </button>
                 <button className="p-1.5 text-gray-700 hover:bg-blue-700 rounded-md">
-                  <Settings className="w-4 h-4" />
+                  <Bell className="w-4 h-4" />
                 </button>
                 <div className="flex items-center gap-2 ml-2">
                   <div className="w-6 h-6 bg-blue-800 rounded-full flex items-center justify-center">
@@ -153,11 +149,11 @@ function App() {
         </div>
 
         {/* Navigation Bar */}
-        <div className="px-4 py-2 bg-white">
+        <div className="border-t-2 border-blue-600 px-4 py-2 bg-white">
           <nav className="flex items-center gap-6">
              <div className="flex items-center gap-2">
                   <Grid3X3 className="w-4 h-4 text-gray-700" />
-                  <span className="text-gray-700 font-medium text-sm">HAYABUSA Lightning</span>
+                  <span className="text-gray-700 font-large text-sm">HAYABUSA Lightning</span>
             </div>
             <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors">
               ホーム
