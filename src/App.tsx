@@ -108,7 +108,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-900 to-sky100">
+    <div className="min-h-screen bg-gradient-to-b from-sky-900 via-sky-100 to-sky100">
       {/* Salesforce Lightning Header */}
       <header className="bg-white border-b border-gray-200 shadow-sm">
         {/* Top Header Bar */}
