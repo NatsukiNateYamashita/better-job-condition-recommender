@@ -194,7 +194,7 @@ function App() {
         {/* Page Title Section */}
         <div className="border-t-2 border-sky-600 px-6 py-4 bg-gray-100">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-sky-900 bg-opacity-20 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-sky-900 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">R</span>
             </div>
             <div>
