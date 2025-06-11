@@ -113,36 +113,37 @@ function App() {
       <header className="bg-white border-b border-gray-200 shadow-sm">
         {/* Top Header Bar */}
         <div className="px-4 py-2 bg-white">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            {/* 左側ロゴ */}
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-3">
                 <Cloud className="w-12 h-12 text-blue-600" />
               </div>
             </div>
-            
-            <div className="flex items-center gap-4">
-              <div className="relative">
+            {/* 中央 検索窓 */}
+            <div className="flex-1 flex justify-center">
+              <div className="relative w-full max-w-xs">
                 <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
                   placeholder="検索..."
-                  className="pl-10 pr-4 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-64 bg-white"
+                  className="pl-10 pr-4 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full bg-white"
                 />
               </div>
-              
-              <div className="flex items-center gap-2">
+            </div>
+            {/* 右側アイコン */}
+            <div className="flex items-center gap-2 ml-4">
               <button className="p-1.5 text-gray-700 hover:bg-blue-700 rounded-md">
-                  <Settings className="w-4 h-4" />
-                </button>
-                <button className="p-1.5 text-gray-700 hover:bg-blue-700 rounded-md">
-                  <Bell className="w-4 h-4" />
-                </button>
-                <div className="flex items-center gap-2 ml-2">
-                  <div className="w-6 h-6 bg-blue-800 rounded-full flex items-center justify-center">
-                    <User className="w-3 h-3 text-gray-700" />
-                  </div>
-                  <span className="text-sm font-medium text-gray-700">山下 夏輝</span>
+                <Settings className="w-4 h-4" />
+              </button>
+              <button className="p-1.5 text-gray-700 hover:bg-blue-700 rounded-md">
+                <Bell className="w-4 h-4" />
+              </button>
+              <div className="flex items-center gap-2 ml-2">
+                <div className="w-6 h-6 bg-blue-800 rounded-full flex items-center justify-center">
+                  <User className="w-3 h-3 text-gray-700" />
                 </div>
+                <span className="text-sm font-medium text-gray-700">山下 夏輝</span>
               </div>
             </div>
           </div>
