@@ -112,11 +112,11 @@ function App() {
       {/* Salesforce Lightning Header */}
       <header className="bg-white border-b border-gray-200 shadow-sm">
         {/* Top Header Bar */}
-        <div className="px-4 py-2 bg-blue-600">
+        <div className="px-4 py-2 bg-white">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-3">
-                <Cloud className="w-6 h-6 text-white" />
+                <Cloud className="w-6 h-6 text-blue" />
                 {/* <div className="flex items-center gap-2">
                   <Grid3X3 className="w-4 h-4 text-white" />
                   <span className="text-white font-medium text-sm">HAYABUSA Lightning</span>
@@ -135,17 +135,17 @@ function App() {
               </div>
               
               <div className="flex items-center gap-2">
-                <button className="p-1.5 text-white hover:bg-blue-700 rounded-md">
+                <button className="p-1.5 text-gray-700 hover:bg-blue-700 rounded-md">
                   <Bell className="w-4 h-4" />
                 </button>
-                <button className="p-1.5 text-white hover:bg-blue-700 rounded-md">
+                <button className="p-1.5 text-gray-700 hover:bg-blue-700 rounded-md">
                   <Settings className="w-4 h-4" />
                 </button>
                 <div className="flex items-center gap-2 ml-2">
                   <div className="w-6 h-6 bg-blue-800 rounded-full flex items-center justify-center">
-                    <User className="w-3 h-3 text-white" />
+                    <User className="w-3 h-3 text-gray-700" />
                   </div>
-                  <span className="text-sm font-medium text-white">田中 太郎</span>
+                  <span className="text-sm font-medium text-gray-700">山下 夏輝</span>
                 </div>
               </div>
             </div>
@@ -155,10 +155,10 @@ function App() {
         {/* Navigation Bar */}
         <div className="px-4 py-2 bg-white">
           <nav className="flex items-center gap-6">
-          <div className="flex items-center gap-2">
-                  <Grid3X3 className="w-4 h-4 text-white" />
-                  <span className="text-white font-medium text-sm">HAYABUSA Lightning</span>
-                </div>
+             <div className="flex items-center gap-2">
+                  <Grid3X3 className="w-4 h-4 text-gray-700" />
+                  <span className="text-gray-700 font-medium text-sm">HAYABUSA Lightning</span>
+            </div>
             <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors">
               ホーム
             </button>
