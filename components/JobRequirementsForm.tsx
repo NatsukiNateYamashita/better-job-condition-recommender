@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { CheckCircle, Clock, MapPin, Briefcase, Pen as Yen, Users } from 'lucide-react';
 import { JobRequirement } from '../types';

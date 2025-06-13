@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Recommendation } from '../types';
 import { Sparkles, Star, ChevronRight, CheckCircle, SlidersHorizontal as SliderHorizontal, ArrowRight } from 'lucide-react';

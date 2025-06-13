@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Download, Share2, Clipboard } from 'lucide-react';
 import { JobRequirement, CandidateMatch } from '../types';

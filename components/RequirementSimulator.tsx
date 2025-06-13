@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { RequirementSimulation, JobRequirement } from '../types';
 import { SlidersHorizontal as SliderHorizontal, ArrowRight, CheckCircle, ChevronRight } from 'lucide-react';

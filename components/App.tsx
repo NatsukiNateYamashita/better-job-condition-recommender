@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import JobRequirementsForm from './components/JobRequirementsForm';
-import CandidateMatchVisualization from './components/CandidateMatchVisualization';
-import RequirementSimulator from './components/RequirementSimulator';
-import RecommendationPanel from './components/RecommendationPanel';
-import ActionPanel from './components/ActionPanel';
-import ChartVisualization from './components/ChartVisualization';
-import { JobRequirement, CandidateMatch, RequirementSimulation, Recommendation } from './types';
-import { calculateMatches, generateSimulations, generateRecommendationsFor80Percent } from './data/mockData';
-import { Search, Bell, Settings, User, Grid3X3, ChevronDown, Cloud } from 'lucide-react';
+'use client';
 
-function App() {
+import React, { useState, useEffect } from 'react';
+import { JobRequirement, CandidateMatch, RequirementSimulation, Recommendation } from '@/types';
+import { calculateMatches, generateSimulations, generateRecommendationsFor80Percent } from '@/data/mockData';
+import { Search, Bell, Settings, User, Grid3X3, ChevronDown, Cloud } from 'lucide-react';
+import JobRequirementsForm from './JobRequirementsForm';
+import CandidateMatchVisualization from './CandidateMatchVisualization';
+import RequirementSimulator from './RequirementSimulator';
+import RecommendationPanel from './RecommendationPanel';
+import ActionPanel from './ActionPanel';
+import ChartVisualization from './ChartVisualization';
+
+export default function App() {
   const [requirements, setRequirements] = useState<JobRequirement>({
     jobType: {
       major: '営業・販売',
@@ -244,9 +246,6 @@ function App() {
             </div>
           </div>
         </div>
-      </main>
-    </div>
+      </main>    </div>
   );
 }
-
-export default App;

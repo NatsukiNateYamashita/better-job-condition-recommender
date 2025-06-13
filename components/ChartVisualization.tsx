@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useRef } from 'react';
 import { CandidateMatch, RequirementSimulation } from '../types';
 import { BarChart2, CheckCircle } from 'lucide-react';
