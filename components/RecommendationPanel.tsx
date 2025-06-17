@@ -46,6 +46,13 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
   // Show recommendations if match rate is below 80%
   const showRecommendations = matchPercentage < 80 && recommendations.length > 0;
 
+  // デバッグ用の関数
+  const handleApplyWithLogging = (recommendation: Recommendation) => {
+    console.log('RecommendationPanel: Applying recommendation');
+    console.log('Recommendation data:', recommendation);
+    onApplyRecommendation(recommendation);
+  };
+
   return (
     <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
       <div className="px-6 py-4 border-b border-gray-200">
@@ -109,7 +116,7 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
                   </span>
                   
                   <button
-                    onClick={() => onApplyRecommendation(rec)}
+                    onClick={() => handleApplyWithLogging(rec)}
                     className="flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
                   >
                     <span>この条件を適用</span>

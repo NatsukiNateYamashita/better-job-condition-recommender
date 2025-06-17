@@ -1,19 +1,22 @@
-import type { Metadata } from 'next'
-import './globals.css'
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Better Job Condition Recommender',
-  description: 'A tool to help you find better job conditions',
-}
+  description: 'Optimize job conditions with AI-powered recommendations',
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="ja" suppressHydrationWarning>
+      <body className={`${inter.className} antialiased`}>{children}</body>
     </html>
-  )
+  );
 }

@@ -15,6 +15,18 @@ const RequirementSimulator: React.FC<RequirementSimulatorProps> = ({
   currentRequirements,
   onApplySimulation
 }) => {
+  // Helper function for applying simulation with logging
+  const handleApplyWithLogging = (simulation: RequirementSimulation) => {
+    console.log('RequirementSimulator: Applying simulation:', {
+      parameter: simulation.parameter,
+      currentValue: simulation.currentValue,
+      newValue: simulation.newValue,
+      matchIncrease: simulation.matchIncrease,
+      percentageIncrease: simulation.percentageIncrease
+    });
+    onApplySimulation(simulation);
+  };
+
   // Helper function to format parameter names in Japanese
   const formatParameter = (param: string): string => {
     const paramMap: Record<string, string> = {
@@ -106,7 +118,7 @@ const RequirementSimulator: React.FC<RequirementSimulatorProps> = ({
                   </span>
                   
                   <button
-                    onClick={() => onApplySimulation(sim)}
+                    onClick={() => handleApplyWithLogging(sim)}
                     className="flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
                   >
                     <span>この条件を適用</span>

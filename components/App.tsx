@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { JobRequirement, CandidateMatch, RequirementSimulation, Recommendation } from '@/types';
 import { calculateMatches, generateSimulations, generateRecommendationsFor80Percent } from '@/data/mockData';
-import { Search, Bell, Settings, User, Grid3X3, ChevronDown, Cloud } from 'lucide-react';
 import JobRequirementsForm from './JobRequirementsForm';
 import CandidateMatchVisualization from './CandidateMatchVisualization';
 import RequirementSimulator from './RequirementSimulator';
@@ -45,168 +44,191 @@ export default function App() {
   
   // Update match data when requirements change
   useEffect(() => {
+    console.log('App: useEffect triggered with requirements:', requirements);
     const newMatchData = calculateMatches(requirements);
-    
+
     setPreviousMatchData(matchData);
     setMatchData(newMatchData);
-    
+
     // Generate simulations
+    console.log('App: Generated match data:', newMatchData);
     const newSimulations = generateSimulations(requirements);
     setSimulations(newSimulations);
-    
+
     // Generate recommendations for 80% target
+    console.log('App: Generated simulations:', newSimulations);
     const newRecommendations = generateRecommendationsFor80Percent(requirements);
+    console.log('App: Generated recommendations:', newRecommendations);
     setRecommendations(newRecommendations);
   }, [requirements]);
   
   const handleRequirementsChange = (newRequirements: JobRequirement) => {
-    setRequirements(newRequirements);
+    console.log('App: Handling requirements change:', {
+      old: requirements,
+      new: newRequirements,
+      source: 'form'
+    });
+
+    // Validate hourly wage is within bounds
+    const validWage = Math.max(900, Math.min(3000, newRequirements.hourlyWage));
+
+    // Update requirements with validated hourly wage and other changes
+    setRequirements(prev => {
+      const updatedRequirements = {
+        ...prev,
+        ...newRequirements,
+        hourlyWage: validWage
+      };
+      console.log('App: Updated requirements:', updatedRequirements);
+      return updatedRequirements;
+    });
   };
   
   const handleApplySimulation = (simulation: RequirementSimulation) => {
+    console.log('App: Starting handleApplySimulation:', {
+      parameter: simulation.parameter,
+      currentValue: simulation.currentValue,
+      newValue: simulation.newValue,
+      source: 'simulation'
+    });
+
     setRequirements(prev => {
-      const newRequirements = { ...prev };
-      
-      if (simulation.parameter === 'hourlyWage') {
-        newRequirements.hourlyWage = simulation.newValue;
-      } else if (simulation.parameter === 'workArea.prefecture') {
-        newRequirements.workArea.prefecture = simulation.newValue;
-        newRequirements.workArea.city = []; // Reset cities when prefecture changes
-      } else if (simulation.parameter === 'jobType.major') {
-        newRequirements.jobType.major = simulation.newValue;
-        newRequirements.jobType.middle = '';
-        newRequirements.jobType.minor = [];
-      } else if (simulation.parameter === 'skillRequirements') {
-        newRequirements.skillRequirements = simulation.newValue;
-      } else if (simulation.parameter === 'workDays') {
-        newRequirements.workDays = simulation.newValue;
+      // Return early if no change
+      if (simulation.parameter === 'hourlyWage' && 
+          Number(simulation.newValue) === prev.hourlyWage) {
+        return prev;
+      }
+
+      let newRequirements: JobRequirement;
+
+      // Create new requirements object and handle specific parameter updates
+      switch (simulation.parameter) {
+        case 'hourlyWage':
+          const newWage = Number(simulation.newValue);
+          console.log('App: Updating hourlyWage:', {
+            old: prev.hourlyWage,
+            new: newWage,
+            source: 'simulation'
+          });
+          newRequirements = {
+            ...prev,
+            hourlyWage: Math.max(900, Math.min(3000, newWage))
+          };
+          break;
+          
+        case 'workArea.prefecture':
+          newRequirements = {
+            ...prev,
+            workArea: {
+              prefecture: String(simulation.newValue),
+              city: []
+            }
+          };
+          break;
+          
+        case 'jobType.major':
+          newRequirements = {
+            ...prev,
+            jobType: {
+              major: String(simulation.newValue),
+              middle: '',
+              minor: []
+            }
+          };
+          break;
+          
+        case 'skillRequirements':
+          newRequirements = {
+            ...prev,
+            skillRequirements: Array.isArray(simulation.newValue) ? 
+              simulation.newValue : [simulation.newValue]
+          };
+          break;
+          
+        case 'workDays':
+          newRequirements = {
+            ...prev,
+            workDays: Array.isArray(simulation.newValue) ? 
+              simulation.newValue : [simulation.newValue]
+          };
+          break;
+          
+        default:
+          newRequirements = { ...prev };
       }
       
+      console.log('App: Updated requirements:', newRequirements);
       return newRequirements;
     });
   };
   
   const handleApplyRecommendation = (recommendation: Recommendation) => {
+    console.log('App: Applying recommendation:', {
+      type: recommendation.changes ? 'multiple' : 'single',
+      recommendation: JSON.stringify(recommendation)
+    });
+    
     setRequirements(prev => {
       const newRequirements = { ...prev };
+      console.log('App: Current requirements:', JSON.stringify(prev));
       
-      if (recommendation.parameter === 'hourlyWage') {
-        newRequirements.hourlyWage = recommendation.suggestedValue;
-      } else if (recommendation.parameter === 'workArea.prefecture') {
-        newRequirements.workArea.prefecture = recommendation.suggestedValue;
-        newRequirements.workArea.city = []; // Reset cities when prefecture changes
-      } else if (recommendation.parameter === 'jobType.major') {
-        newRequirements.jobType.major = recommendation.suggestedValue;
-        newRequirements.jobType.middle = '';
-        newRequirements.jobType.minor = [];
-      } else if (recommendation.parameter === 'skillRequirements') {
-        newRequirements.skillRequirements = recommendation.suggestedValue;
-      } else if (recommendation.parameter === 'workDays') {
-        newRequirements.workDays = recommendation.suggestedValue;
+      const applyChange = (param: string, value: any) => {
+        console.log('App: Applying change:', {
+          parameter: param,
+          value: JSON.stringify(value),
+          valueType: typeof value
+        });
+        
+        switch (param) {
+          case 'hourlyWage':
+            newRequirements.hourlyWage = Number(value);
+            console.log('App: Updated hourlyWage:', newRequirements.hourlyWage);
+            break;
+          case 'workArea.prefecture':
+            newRequirements.workArea = {
+              prefecture: String(value),
+              city: []
+            };
+            console.log('App: Updated workArea:', newRequirements.workArea);
+            break;
+          case 'jobType.major':
+            newRequirements.jobType = {
+              major: String(value),
+              middle: '',
+              minor: []
+            };
+            console.log('App: Updated jobType:', newRequirements.jobType);
+            break;
+          case 'skillRequirements':
+            newRequirements.skillRequirements = Array.isArray(value) ? [...value] : [value];
+            console.log('App: Updated skillRequirements:', newRequirements.skillRequirements);
+            break;
+          case 'workDays':
+            newRequirements.workDays = Array.isArray(value) ? [...value] : [value];
+            console.log('App: Updated workDays:', newRequirements.workDays);
+            break;
+          default:
+            console.warn('App: Unhandled parameter type:', param);
+        }
+      };
+
+      if (recommendation.changes) {
+        console.log('App: Applying multiple changes:', recommendation.changes.length);
+        recommendation.changes.forEach(change => {
+          applyChange(change.parameter, change.suggestedValue);
+        });
+      } else {
+        console.log('App: Applying single change');
+        applyChange(recommendation.parameter, recommendation.suggestedValue);
       }
       
+      console.log('App: Final requirements:', JSON.stringify(newRequirements));
       return newRequirements;
     });
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-900 via-sky-100 to-sky100">
-      {/* Salesforce Lightning Header */}
-      <header className="bg-white border-b border-gray-200 shadow-sm">
-        {/* Top Header Bar */}
-        <div className="px-4 py-2 bg-white">
-          <div className="flex items-center">
-            {/* 左側ロゴ */}
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-3">
-                <Cloud className="w-12 h-12 text-sky-600 fill-sky-600" />
-              </div>
-            </div>
-            {/* 中央 検索窓 */}
-            <div className="flex-1 flex justify-center">
-              <div className="relative w-full max-w-xs">
-                <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="検索..."
-                  className="pl-10 pr-4 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-sky-600 focus:border-sky-600 w-full bg-white"
-                />
-              </div>
-            </div>
-            {/* 右側アイコン */}
-            <div className="flex items-center gap-2 ml-4">
-              <button className="p-1.5 text-gray-700 hover:bg-sky-600 rounded-md">
-                <Settings className="w-4 h-4" />
-              </button>
-              <button className="p-1.5 text-gray-700 hover:bg-sky-600 rounded-md">
-                <Bell className="w-4 h-4" />
-              </button>
-              <div className="flex items-center gap-2 ml-2">
-                <div className="w-6 h-6 bg-sky-700 rounded-full flex items-center justify-center">
-                  <User className="w-3 h-3 text-gray-700" />
-                </div>
-                <span className="text-sm font-medium text-gray-700">山下 夏輝</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Navigation Bar */}
-        <div className="px-4 py-2 bg-white">
-          <nav className="flex items-center gap-6">
-             <div className="flex items-center gap-2">
-                  <Grid3X3 className="w-6 h-6 text-gray-700" />
-                  <span className="text-gray-700 font-bold text-lg">HAYABUSA Lightning</span>
-            </div>
-            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-sky-600 bg-sky-50 rounded-md hover:bg-sky-100 transition-colors">
-              ホーム
-            </button>
-            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-sky-600 hover:bg-gray-50 rounded-md transition-colors">
-              Chatter
-            </button>
-            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-sky-600 hover:bg-gray-50 rounded-md transition-colors">
-              ジョブ検索
-            </button>
-            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-sky-600 hover:bg-gray-50 rounded-md transition-colors">
-              キャンディデート検索
-            </button>
-            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-sky-600 hover:bg-gray-50 rounded-md transition-colors">
-              クライアント
-              <ChevronDown className="w-3 h-3" />
-            </button>
-            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-sky-600 hover:bg-gray-50 rounded-md transition-colors">
-              キャンディデイト/クライアント
-              <ChevronDown className="w-3 h-3" />
-            </button>
-            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-sky-600 hover:bg-gray-50 rounded-md transition-colors">
-              ジョブ
-              <ChevronDown className="w-3 h-3" />
-            </button>
-            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-sky-600 hover:bg-gray-50 rounded-md transition-colors">
-              マッチングパイプライン
-              <ChevronDown className="w-3 h-3" />
-            </button>
-            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-sky-600 hover:bg-gray-50 rounded-md transition-colors">
-              さらに表示
-              <ChevronDown className="w-3 h-3" />
-            </button>
-          </nav>
-        </div>
-
-        {/* Page Title Section */}
-        <div className="border-t-2 border-sky-600 px-6 py-4 bg-gray-100">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-sky-900 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">R</span>
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-glay-900">求人条件最適化ツール</h1>
-              <p className="text-glay-700 text-sm mt-1">人材プール照合による最適な求人条件の提案</p>
-            </div>
-          </div>
-        </div>
-      </header>
-      
       <main className="p-6">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -246,6 +268,7 @@ export default function App() {
             </div>
           </div>
         </div>
-      </main>    </div>
+      </main>
+    </div>
   );
 }

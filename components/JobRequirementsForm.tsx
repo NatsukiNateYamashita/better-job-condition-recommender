@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CheckCircle, Clock, MapPin, Briefcase, Pen as Yen, Users } from 'lucide-react';
 import { JobRequirement } from '../types';
 import { jobTypeHierarchy, locationHierarchy, skills } from '../data/mockData';
@@ -14,45 +14,89 @@ const JobRequirementsForm: React.FC<JobRequirementsFormProps> = ({
   requirements,
   onRequirementsChange 
 }) => {
+  // Initialize local state with props
   const [localRequirements, setLocalRequirements] = useState<JobRequirement>(requirements);
+
+  // Props更新時の同期処理を改善
+  useEffect(() => {
+    console.log('JobRequirementsForm: Props changed:', {
+      propsWage: requirements.hourlyWage,
+      localWage: localRequirements.hourlyWage,
+      shouldUpdate: requirements.hourlyWage !== localRequirements.hourlyWage
+    });
+
+    // propsが変更された場合、ローカル状態を更新
+    if (JSON.stringify(requirements) !== JSON.stringify(localRequirements)) {
+      setLocalRequirements(requirements);
+    }
+  }, [requirements]);
+
+  const handleHourlyWageChange = (wage: number) => {
+    // バリデーションと重複更新の防止
+    const validWage = Math.max(900, Math.min(3000, wage));
+    if (validWage === localRequirements.hourlyWage) return;
+
+    console.log('JobRequirementsForm: Wage change initiated:', {
+      old: localRequirements.hourlyWage,
+      new: validWage
+    });
+
+    // 新しい要件オブジェクトを作成
+    const newRequirements = {
+      ...localRequirements,
+      hourlyWage: validWage
+    };
+
+    // ローカル状態を更新
+    setLocalRequirements(newRequirements);
+    
+    // 親コンポーネントに即座に通知
+    onRequirementsChange(newRequirements);
+  };
+
+  const updateRequirements = (updates: Partial<JobRequirement>) => {
+    const newRequirements = {
+      ...localRequirements,
+      ...updates
+    };
+    
+    setLocalRequirements(newRequirements);
+    onRequirementsChange(newRequirements);
+  };
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
     
     if (name === 'hourlyWage') {
-      const hourlyWage = parseInt(value);
-      setLocalRequirements(prev => ({ ...prev, hourlyWage }));
+      handleHourlyWageChange(parseInt(value));
     } else if (name === 'dependentStatus') {
-      const dependentStatus = (e.target as HTMLInputElement).checked;
-      setLocalRequirements(prev => ({ ...prev, dependentStatus }));
+      updateRequirements({ dependentStatus: checked });
     } else if (name === 'jobTypeMajor') {
-      setLocalRequirements(prev => ({
-        ...prev,
+      updateRequirements({
         jobType: {
           major: value,
           middle: '',
           minor: []
         }
-      }));
+      });
     } else if (name === 'jobTypeMiddle') {
-      setLocalRequirements(prev => ({
-        ...prev,
+      updateRequirements({
         jobType: {
-          ...prev.jobType,
+          ...localRequirements.jobType,
           middle: value,
           minor: []
         }
-      }));
+      });
     } else if (name === 'prefecture') {
-      setLocalRequirements(prev => ({
-        ...prev,
+      updateRequirements({
         workArea: {
           prefecture: value,
           city: []
         }
-      }));
+      });
     }
   };
 
@@ -61,71 +105,65 @@ const JobRequirementsForm: React.FC<JobRequirementsFormProps> = ({
   ) => {
     const { name, value } = e.target;
     
-    setLocalRequirements(prev => ({
-      ...prev,
+    updateRequirements({
       workHours: {
-        ...prev.workHours,
+        ...localRequirements.workHours,
         [name === 'startTime' ? 'start' : 'end']: value
       }
-    }));
+    });
   };
 
   const handleWorkDayToggle = (day: string) => {
-    setLocalRequirements(prev => {
-      const updatedWorkDays = prev.workDays.includes(day)
-        ? prev.workDays.filter(d => d !== day)
-        : [...prev.workDays, day];
-      
-      return { ...prev, workDays: updatedWorkDays };
-    });
+    const updatedWorkDays = localRequirements.workDays.includes(day)
+      ? localRequirements.workDays.filter(d => d !== day)
+      : [...localRequirements.workDays, day];
+    
+    updateRequirements({ workDays: updatedWorkDays });
   };
 
   const handleSkillToggle = (skill: string) => {
-    setLocalRequirements(prev => {
-      const updatedSkills = prev.skillRequirements.includes(skill)
-        ? prev.skillRequirements.filter(s => s !== skill)
-        : [...prev.skillRequirements, skill];
-      
-      return { ...prev, skillRequirements: updatedSkills };
-    });
+    const updatedSkills = localRequirements.skillRequirements.includes(skill)
+      ? localRequirements.skillRequirements.filter(s => s !== skill)
+      : [...localRequirements.skillRequirements, skill];
+    
+    updateRequirements({ skillRequirements: updatedSkills });
   };
 
   const handleJobTypeMinorToggle = (minor: string) => {
-    setLocalRequirements(prev => {
-      const updatedMinor = prev.jobType.minor.includes(minor)
-        ? prev.jobType.minor.filter(m => m !== minor)
-        : [...prev.jobType.minor, minor];
-      
-      return {
-        ...prev,
-        jobType: {
-          ...prev.jobType,
-          minor: updatedMinor
-        }
-      };
+    const updatedMinor = localRequirements.jobType.minor.includes(minor)
+      ? localRequirements.jobType.minor.filter(m => m !== minor)
+      : [...localRequirements.jobType.minor, minor];
+    
+    updateRequirements({
+      jobType: {
+        ...localRequirements.jobType,
+        minor: updatedMinor
+      }
     });
   };
 
   const handleCityToggle = (city: string) => {
-    setLocalRequirements(prev => {
-      const updatedCities = prev.workArea.city.includes(city)
-        ? prev.workArea.city.filter(c => c !== city)
-        : [...prev.workArea.city, city];
-      
-      return {
-        ...prev,
-        workArea: {
-          ...prev.workArea,
-          city: updatedCities
-        }
-      };
+    const updatedCities = localRequirements.workArea.city.includes(city)
+      ? localRequirements.workArea.city.filter(c => c !== city)
+      : [...localRequirements.workArea.city, city];
+    
+    updateRequirements({
+      workArea: {
+        ...localRequirements.workArea,
+        city: updatedCities
+      }
     });
   };
 
-  // Update parent component when requirements change
+  // 状態変更の監視用
   React.useEffect(() => {
-    onRequirementsChange(localRequirements);
-  }, [localRequirements, onRequirementsChange]);
+    console.log('JobRequirementsForm: State updated:', {
+      timestamp: new Date().toISOString(),
+      localWage: localRequirements.hourlyWage,
+      propsWage: requirements.hourlyWage,
+      isSync: localRequirements.hourlyWage === requirements.hourlyWage
+    });
+  }, [localRequirements.hourlyWage, requirements.hourlyWage]);
 
   const weekdays = ['月', '火', '水', '木', '金', '土', '日'];
   const jobTypeMajors = Object.keys(jobTypeHierarchy);
@@ -220,7 +258,10 @@ const JobRequirementsForm: React.FC<JobRequirementsFormProps> = ({
               max="3000"
               step="50"
               value={localRequirements.hourlyWage}
-              onChange={handleInputChange}
+              onChange={(e) => {
+                const newValue = Number(e.target.value);
+                handleHourlyWageChange(newValue);
+              }}
               className="w-full mr-4 accent-blue-600"
             />
             <div className="w-20 text-right font-medium text-sm">

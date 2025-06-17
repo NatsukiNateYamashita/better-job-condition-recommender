@@ -32,10 +32,17 @@ export type RequirementSimulation = {
   percentageIncrease: number;
 };
 
+export type RecommendationChange = {
+  parameter: string;
+  currentValue: string | number | string[];
+  suggestedValue: string | number | string[];
+};
+
 export type Recommendation = {
   parameter: string;
   currentValue: any;
   suggestedValue: any;
   potentialIncrease: number;
   priority: 'high' | 'medium' | 'low';
+  changes?: RecommendationChange[];
 };
