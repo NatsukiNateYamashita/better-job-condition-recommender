@@ -240,7 +240,7 @@ export default function App() {
               />
               <ActionPanel requirements={requirements} matchData={matchData} />
             </div>
-            
+
             {/* Middle Column */}
             <div className="lg:col-span-1 space-y-6">
               <CandidateMatchVisualization 
@@ -252,9 +252,14 @@ export default function App() {
                 simulations={simulations}
               />
             </div>
-            
+
             {/* Right Column */}
             <div className="lg:col-span-1 space-y-6">
+              {/* <RequirementCombinationPanel
+                recommendations={recommendations}
+                onApplyCombination={handleApplyRecommendation}
+                matchPercentage={matchData.matchPercentage}
+              /> */}
               <RecommendationPanel 
                 recommendations={recommendations}
                 onApplyRecommendation={handleApplyRecommendation}
