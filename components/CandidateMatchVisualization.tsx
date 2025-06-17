@@ -1,3 +1,7 @@
+'use client';
+
+'use client';
+
 import React from 'react';
 import { CandidateMatch } from '../types';
 import { Users, Percent, ArrowUp, AlertTriangle } from 'lucide-react';

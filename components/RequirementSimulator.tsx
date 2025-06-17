@@ -1,23 +1,37 @@
-import React from 'react';
-import { Recommendation } from '../types';
-import { Sparkles, Star, ChevronRight, CheckCircle, SlidersHorizontal as SliderHorizontal, ArrowRight } from 'lucide-react';
+'use client';
 
-interface RecommendationPanelProps {
-  recommendations: Recommendation[];
-  onApplyRecommendation: (recommendation: Recommendation) => void;
-  matchPercentage: number;
+import React from 'react';
+import { RequirementSimulation, JobRequirement } from '../types';
+import { SlidersHorizontal as SliderHorizontal, ArrowRight, CheckCircle, ChevronRight } from 'lucide-react';
+
+interface RequirementSimulatorProps {
+  simulations: RequirementSimulation[];
+  currentRequirements: JobRequirement;
+  onApplySimulation: (simulation: RequirementSimulation) => void;
 }
 
-const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
-  recommendations,
-  onApplyRecommendation,
-  matchPercentage
+const RequirementSimulator: React.FC<RequirementSimulatorProps> = ({
+  simulations,
+  currentRequirements,
+  onApplySimulation
 }) => {
+  // Helper function for applying simulation with logging
+  const handleApplyWithLogging = (simulation: RequirementSimulation) => {
+    console.log('RequirementSimulator: Applying simulation:', {
+      parameter: simulation.parameter,
+      currentValue: simulation.currentValue,
+      newValue: simulation.newValue,
+      matchIncrease: simulation.matchIncrease,
+      percentageIncrease: simulation.percentageIncrease
+    });
+    onApplySimulation(simulation);
+  };
+
   // Helper function to format parameter names in Japanese
   const formatParameter = (param: string): string => {
     const paramMap: Record<string, string> = {
       'jobType.major': '職種大',
-      'jobType.middle': '職種中', 
+      'jobType.middle': '職種中',
       'jobType.minor': '職種小',
       'hourlyWage': '時給',
       'workArea.prefecture': '都道府県',
@@ -41,30 +55,27 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
     return String(value);
   };
 
-  // Show recommendations if match rate is below 80%
-  const showRecommendations = matchPercentage < 80 && recommendations.length > 0;
+  // Filter out negative simulations
+  const positiveSimulations = simulations.filter(sim => sim.percentageIncrease > 0);
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
       <div className="px-6 py-4 border-b border-gray-200">
-        <h2 className="flex items-center gap-2 text-lg font-semibold text-gray-900">
-          <Sparkles className="w-5 h-5 text-yellow-500" />
-          オススメ条件調整
-        </h2>
+        <h2 className="text-lg font-semibold text-gray-900">条件調整シミュレーション</h2>
       </div>
       
       <div className="p-6">
-        {!showRecommendations ? (
+        {positiveSimulations.length === 0 ? (
           <div className="text-center py-8">
             <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-3" />
             <p className="text-gray-600 font-medium">現状の条件が最適です</p>
             <p className="text-sm text-gray-500 mt-1">
-              マッチ率80%以上を達成しています
+              これ以上の条件調整による改善は見込めません
             </p>
           </div>
         ) : (
           <div className="space-y-4">
-            {recommendations.map((rec, index) => (
+            {positiveSimulations.map((sim, index) => (
               <div 
                 key={index}
                 className="p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50/50 transition-all"
@@ -73,11 +84,11 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
                   <div className="flex items-center gap-2">
                     <SliderHorizontal className="w-4 h-4 text-blue-600" />
                     <span className="font-medium text-gray-800 text-sm">
-                      {formatParameter(rec.parameter)}を調整
+                      {formatParameter(sim.parameter)}を調整
                     </span>
                   </div>
                   <div className="text-sm font-medium px-2 py-1 rounded bg-green-100 text-green-800">
-                    +{rec.potentialIncrease.toFixed(1)}%
+                    +{sim.percentageIncrease.toFixed(1)}%
                   </div>
                 </div>
                 
@@ -85,7 +96,7 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
                   <div>
                     <div className="text-gray-500 mb-1">現在</div>
                     <div className="font-medium">
-                      {formatValue(rec.parameter, rec.currentValue)}
+                      {formatValue(sim.parameter, sim.currentValue)}
                     </div>
                   </div>
                   
@@ -96,18 +107,18 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
                   <div>
                     <div className="text-gray-500 mb-1">変更後</div>
                     <div className="font-medium text-blue-700">
-                      {formatValue(rec.parameter, rec.suggestedValue)}
+                      {formatValue(sim.parameter, sim.newValue)}
                     </div>
                   </div>
                 </div>
                 
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-green-700 font-medium">
-                    マッチ率80%達成のための推奨調整
+                    +{sim.matchIncrease}人の候補者増加
                   </span>
                   
                   <button
-                    onClick={() => onApplyRecommendation(rec)}
+                    onClick={() => handleApplyWithLogging(sim)}
                     className="flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
                   >
                     <span>この条件を適用</span>
@@ -123,4 +134,4 @@ const RecommendationPanel: React.FC<RecommendationPanelProps> = ({
   );
 };
 
-export default RecommendationPanel;
+export default RequirementSimulator;
