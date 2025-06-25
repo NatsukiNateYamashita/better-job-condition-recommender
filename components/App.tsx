@@ -9,6 +9,7 @@ import RequirementSimulator from './RequirementSimulator';
 import RecommendationPanel from './RecommendationPanel';
 import ActionPanel from './ActionPanel';
 import ChartVisualization from './ChartVisualization';
+import AzureFunctionsPanel from './AzureFunctionsPanel';
 
 export default function App() {
   const [requirements, setRequirements] = useState<JobRequirement>({
@@ -251,6 +252,7 @@ export default function App() {
                 matchData={matchData} 
                 simulations={simulations}
               />
+              <AzureFunctionsPanel />
             </div>
 
             {/* Right Column */}
@@ -270,6 +272,7 @@ export default function App() {
                 currentRequirements={requirements}
                 onApplySimulation={handleApplySimulation}
               />
+              <AzureFunctionsPanel />
             </div>
           </div>
         </div>
