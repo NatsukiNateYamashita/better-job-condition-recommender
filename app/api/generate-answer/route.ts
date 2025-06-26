@@ -1,16 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { AzureOpenAI } from 'openai';
+import { configs } from '@/config/azure';
 
-export async function POST(request: NextRequest) {
+// SSL証明書の検証を無効化
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
+
+export async function POST(req: NextRequest) {
   try {
     const client = new AzureOpenAI({
-      apiKey: process.env.AZURE_OPENAI_API_KEY,
-      apiVersion: process.env.AZURE_OPENAI_API_VERSION_CHAT,
-      endpoint: process.env.AZURE_OPENAI_ENDPOINT,
+      apiKey: configs.chat.apiKey,
+      apiVersion: configs.chat.apiVersion,
+      endpoint: configs.chat.azureEndpoint
     });
 
     const response = await client.chat.completions.create({
-      model: process.env.AZURE_OPENAI_CHAT_MODEL || 'o3-mini',
       messages: [
         { role: "system", content: "You are a helpful assistant." },
         { role: "user", content: "I am going to Paris, what should I see?" }
@@ -20,17 +23,20 @@ export async function POST(request: NextRequest) {
       top_p: 1.0,
       frequency_penalty: 0.0,
       presence_penalty: 0.0,
+      model: configs.chat.modelName
     });
 
-    return NextResponse.json({
-      success: true,
-      data: response.choices[0]?.message?.content || 'No response generated'
+    const content = response.choices[0].message.content;
+
+    return NextResponse.json({ 
+      success: true, 
+      output: content 
     });
   } catch (error) {
-    console.error('Chat completion error:', error);
-    return NextResponse.json(
-      { success: false, error: 'Failed to generate answer' },
-      { status: 500 }
-    );
+    console.error('Chat generation error:', error);
+    return NextResponse.json({ 
+      success: false, 
+      error: 'Failed to generate answer' 
+    }, { status: 500 });
   }
 }

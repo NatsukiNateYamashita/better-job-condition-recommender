@@ -1,62 +1,74 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { configs } from '../../../config/azure';
 
-export async function POST(request: NextRequest) {
-  let client: any = null;
-  
+// SSL証明書の検証を無効化
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
+
+export async function POST(request: NextRequest) {  
   try {
-    // Databricks SQLクライアントを動的にインポート
-    let DBSQLClient;
-    try {
-      const databricksModule = await import('@databricks/sql');
-      DBSQLClient = databricksModule.DBSQLClient;
-    } catch (importError) {
-      console.error('Failed to import @databricks/sql:', importError);
-      return NextResponse.json(
-        { 
-          success: false, 
-          error: 'Databricks SQL client is not available. Please ensure @databricks/sql is properly installed.' 
-        },
-        { status: 500 }
-      );
-    }
-
-    client = new DBSQLClient();
+    // warehouse_idをhttp_pathから抽出
+    const warehouseId = configs.databricks.httpPath.split('/').pop();
     
-    await client.connect({
-      token: process.env.DATABRICKS_ACCESS_TOKEN!,
-      host: process.env.DATABRICKS_SERVER_HOSTNAME!,
-      path: process.env.DATABRICKS_HTTP_PATH!,
-    });
-
-    const session = await client.openSession();
-    const queryOperation = await session.executeStatement(
-      "select * from hive_metastore.jms_prod.scores_overall limit 5",
+    const requestBody = {
+      statement: "select * from hive_metastore.jms_prod.scores_overall limit 5",
+      warehouse_id: warehouseId,
+      wait_timeout: "30s"
+    };
+    
+    // Databricks SQL Statement APIを使用
+    const response = await fetch(
+      `https://${configs.databricks.serverHostname}/api/2.0/sql/statements/`,
       {
-        runAsync: true,
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${configs.databricks.accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody)
       }
     );
 
-    const result = await queryOperation.fetchAll();
-    await queryOperation.close();
-    await session.close();
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP error! status: ${response.status}, body: ${errorText}`);
+    }
 
+    const data = await response.json();
+    
+    // 実際のデータを抽出
+    const resultData = data.result?.data_array || data.data_array || data.result || data;
+    
+    // データを表形式で整形
+    let outputText = '';
+    if (Array.isArray(resultData) && resultData.length > 0) {
+      outputText = `Query Results (${resultData.length} rows):\n\n`;
+      resultData.forEach((row: any[], index: number) => {
+        outputText += `Row ${index + 1}:\n`;
+        outputText += `  candidate_id: ${row[0]}\n`;
+        outputText += `  score_overall: ${row[3]}\n`;
+        outputText += `  job_id: ${row[1]}\n`;
+        outputText += `  matching_key: ${row[2]}\n`;
+        outputText += `  score_commuting_time: ${row[4]}\n`;
+        outputText += `  score_job_content: ${row[5]}\n`;
+        outputText += `  score_occupation: ${row[6]}\n`;
+        outputText += `  ---\n`;
+      });
+    } else {
+      outputText = 'Query executed successfully, but no data returned.';
+    }
+    
     return NextResponse.json({
       success: true,
-      data: result
+      output: outputText
     });
+
   } catch (error) {
-    console.error('Databricks query error:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to execute Databricks query' },
+      { 
+        success: false, 
+        error: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
-  } finally {
-    if (client) {
-      try {
-        await client.close();
-      } catch (closeError) {
-        console.error('Error closing Databricks client:', closeError);
-      }
-    }
   }
 }
